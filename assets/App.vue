@@ -2452,6 +2452,26 @@ export default {
     },
   },
 
+  watch: {
+    cwd: {
+      handler() {
+        // 切换目录时清除搜索结果
+        this.searchResults = [];
+        this.fetchFiles();
+        const url = new URL(window.location);
+        if ((url.searchParams.get("p") || "") !== this.cwd) {
+          this.cwd
+            ? url.searchParams.set("p", this.cwd)
+            : url.searchParams.delete("p");
+          window.history.pushState(null, "", url.toString());
+        }
+        document.title = this.cwd.replace(/.*\/(?!$)|\//g, "") === "/"
+            ? "军旅旧事云盘"
+            :`${this.cwd.replace(/.*\/(?!$)|\//g, "") || "/" } - 军旅旧事云盘`;
+      },
+      immediate: true,
+    },
+
     search: {
       handler(newVal) {
         // 防抖搜索
