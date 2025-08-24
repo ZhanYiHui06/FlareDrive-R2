@@ -92,7 +92,7 @@
           @focus="onSearchFocus"
           @blur="onSearchBlur"
           aria-label="Search"
-          placeholder="🍿 输入以全局搜索文件"
+          placeholder="🔍 输入以全局搜索文件"
           class="search-input"
           ref="searchInput"
         />
@@ -582,7 +582,7 @@ export default {
     showUploadPopup: false,
     uploadProgress: null,
     uploadQueue: [],
-    backgroundImageUrl: "/assets/bg-light.webp",
+    backgroundImageUrl: "/assets/bg.jpg",
     needLogin: false,
     isGuest: true, // 默认为游客状态
     isLoggedIn: false,
@@ -2451,26 +2451,6 @@ export default {
       return results;
     },
   },
-
-  watch: {
-    cwd: {
-      handler() {
-        // 切换目录时清除搜索结果
-        this.searchResults = [];
-        this.fetchFiles();
-        const url = new URL(window.location);
-        if ((url.searchParams.get("p") || "") !== this.cwd) {
-          this.cwd
-            ? url.searchParams.set("p", this.cwd)
-            : url.searchParams.delete("p");
-          window.history.pushState(null, "", url.toString());
-        }
-        document.title = this.cwd.replace(/.*\/(?!$)|\//g, "") === "/"
-            ? "FlareDrive-R2 - 优雅的 Cloudflare R2 网盘文件库"
-            :`${this.cwd.replace(/.*\/(?!$)|\//g, "") || "/" } - 优雅的 Cloudflare R2 网盘文件库`;
-      },
-      immediate: true,
-    },
 
     search: {
       handler(newVal) {
